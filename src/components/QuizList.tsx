@@ -6,11 +6,10 @@ import { quizStorage } from "../services/quizStorage";
 export const QuizList = () => {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize storage and load quizzes
-    quizStorage.initialize();
+    //  load quizzes
     const allQuizzes = quizStorage.getAllQuizzes();
     setQuizzes(allQuizzes);
     setLoading(false);
@@ -38,7 +37,7 @@ export const QuizList = () => {
     });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">

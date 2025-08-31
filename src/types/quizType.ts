@@ -2,7 +2,7 @@ export interface QuizBlock {
   id: string;
   type: "heading" | "question" | "button" | "footer";
   content: string;
-  properties: Record<string, any>;
+  properties: Record<string, string | string[]>;
 }
 
 export interface Quiz {
