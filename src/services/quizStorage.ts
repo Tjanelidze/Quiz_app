@@ -128,6 +128,38 @@ class QuizStorageService {
     );
   }
 
+  publishQuiz(id: string): boolean {
+    const quizzes = this.getQuizzesFromStorage();
+    const quizIndex = quizzes.findIndex((q) => q.id === id);
+
+    if (quizIndex === -1) return false;
+
+    quizzes[quizIndex] = {
+      ...quizzes[quizIndex],
+      published: true,
+      updatedAt: new Date().toISOString(),
+      publishedAt: new Date().toISOString(),
+    };
+
+    return this.saveQuizzesToStorage(quizzes);
+  }
+
+  unpublishQuiz(id: string): boolean {
+    const quizzes = this.getQuizzesFromStorage();
+    const quizIndex = quizzes.findIndex((q) => q.id === id);
+
+    if (quizIndex === -1) return false;
+
+    quizzes[quizIndex] = {
+      ...quizzes[quizIndex],
+      published: false,
+      updatedAt: new Date().toISOString(),
+      publishedAt: undefined,
+    };
+
+    return this.saveQuizzesToStorage(quizzes);
+  }
+
   deleteBlock({ quizId, blockId }: { quizId: string; blockId: string }) {
     const quizzes = this.getQuizzesFromStorage();
     const quizIndex = quizzes.findIndex((quiz) => quiz.id === quizId);
@@ -190,6 +222,17 @@ class QuizStorageService {
     quizzes[quizIndex] = updatedQuiz;
 
     return this.saveQuizzesToStorage(quizzes, "Block added successfully!");
+  }
+
+  deleteTemporaryBlock(blockId: string): boolean {
+    const tempBlocks = this.getTemporaryBlocks();
+    const updatedTempBlocks = tempBlocks.filter(
+      (block) => block.id !== blockId,
+    );
+    this.saveTemporaryBlocks(updatedTempBlocks);
+
+    toast.success("Block deleted successfully!");
+    return true;
   }
 
   getTemporaryBlocksFromStorage(): QuizBlock[] {

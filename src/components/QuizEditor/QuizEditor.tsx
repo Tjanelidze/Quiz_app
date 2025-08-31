@@ -117,7 +117,6 @@ export const QuizEditor = () => {
           const savedQuiz = quizStorage.getQuizById(quiz.id);
           if (savedQuiz) {
             setQuiz(savedQuiz);
-            // Update the URL to reflect the new ID
             navigate(`/quiz/edit/${savedQuiz.id}`, { replace: true });
           }
         }
@@ -132,7 +131,7 @@ export const QuizEditor = () => {
     }
   };
 
-  const onDelete = useCallback(
+  const handleDelete = useCallback(
     (blockId: string) => {
       setQuiz((prev) => ({
         ...prev,
@@ -141,10 +140,8 @@ export const QuizEditor = () => {
       }));
 
       if (isNewQuiz) {
-        // For new quiz, update temporary storage
-        const tempBlocks = quizStorage.getTemporaryBlocksFromStorage();
-        const updatedTempBlocks = tempBlocks.filter((b) => b.id !== blockId);
-        quizStorage.saveTemporaryBlocks(updatedTempBlocks);
+        // For new quiz, delete from temporary storage
+        quizStorage.deleteTemporaryBlock(blockId);
       } else {
         // For existing quiz, delete from permanent storage
         quizStorage.deleteBlock({ quizId: id!, blockId });
@@ -157,7 +154,7 @@ export const QuizEditor = () => {
     [selectedBlockId, isNewQuiz, id],
   );
 
-  const onUpdate = useCallback(
+  const handleUpdate = useCallback(
     (blockId: string, updates: Partial<QuizBlock>) => {
       setQuiz((prev) => ({
         ...prev,
@@ -170,7 +167,55 @@ export const QuizEditor = () => {
     [],
   );
 
-  const onSelect = useCallback((id: string) => {
+  const handlePublish = async () => {
+    try {
+      let quizId = quiz.id;
+
+      // First save the quiz if it hasn't been saved yet
+      if (quiz.id === "new") {
+        const saveSuccess = quizStorage.saveQuiz(quiz);
+        if (!saveSuccess) {
+          return;
+        }
+
+        const savedQuizzes = quizStorage.getAllQuizzes();
+        const savedQuiz = savedQuizzes[savedQuizzes.length - 1];
+        quizId = savedQuiz.id;
+        setQuiz(savedQuiz);
+        navigate(`/quiz/edit/${savedQuiz.id}`, { replace: true });
+      }
+
+      const success = quizStorage.publishQuiz(quizId);
+      if (success) {
+        setQuiz((prev) => ({
+          ...prev,
+          published: true,
+          updatedAt: new Date().toISOString(),
+          publishedAt: new Date().toISOString(),
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to publish quiz:", error);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    try {
+      const success = quizStorage.unpublishQuiz(quiz.id);
+      if (success) {
+        setQuiz((prev) => ({
+          ...prev,
+          published: false,
+          updatedAt: new Date().toISOString(),
+          publishedAt: undefined,
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to unpublish quiz:", error);
+    }
+  };
+
+  const handleSelect = useCallback((id: string) => {
     setSelectedBlockId(id);
   }, []);
 
@@ -231,9 +276,7 @@ export const QuizEditor = () => {
               Save
             </button>
             <button
-              onClick={() => {
-                // TODO: PUBLISH BUTTON
-              }}
+              onClick={quiz.published ? handleUnpublish : handlePublish}
               className={`cursor-pointer rounded-lg px-4 py-2 font-medium ${
                 quiz.published
                   ? "bg-red-600 text-white hover:bg-red-700"
@@ -307,8 +350,8 @@ export const QuizEditor = () => {
                     key={block.id}
                     block={block}
                     isSelected={selectedBlockId === block.id}
-                    onSelect={onSelect}
-                    onDelete={onDelete}
+                    onSelect={handleSelect}
+                    onDelete={handleDelete}
                   />
                 ))}
               </div>
@@ -334,7 +377,7 @@ export const QuizEditor = () => {
                 <textarea
                   value={selectedBlock.content}
                   onChange={(e) => {
-                    onUpdate(selectedBlock.id, { content: e.target.value });
+                    handleUpdate(selectedBlock.id, { content: e.target.value });
                   }}
                   className="w-full rounded-md border border-gray-300 p-2 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   rows={3}
@@ -362,7 +405,7 @@ export const QuizEditor = () => {
                     <select
                       value={selectedBlock.properties.questionType || "single"}
                       onChange={(e) =>
-                        onUpdate(selectedBlock.id, {
+                        handleUpdate(selectedBlock.id, {
                           properties: {
                             ...selectedBlock.properties,
                             questionType: e.target.value,
@@ -405,7 +448,7 @@ export const QuizEditor = () => {
                                   ]),
                                 ];
                                 newOptions[index] = e.target.value;
-                                onUpdate(selectedBlock.id, {
+                                handleUpdate(selectedBlock.id, {
                                   properties: {
                                     ...selectedBlock.properties,
                                     options: newOptions,
@@ -424,7 +467,7 @@ export const QuizEditor = () => {
                                     "Option 2",
                                   ]
                                 ).filter((_: string, i: number) => i !== index);
-                                onUpdate(selectedBlock.id, {
+                                handleUpdate(selectedBlock.id, {
                                   properties: {
                                     ...selectedBlock.properties,
                                     options: newOptions,
@@ -467,7 +510,7 @@ export const QuizEditor = () => {
                               ]),
                               `Option ${(selectedBlock.properties.options || ["Option 1", "Option 2"]).length + 1}`,
                             ];
-                            onUpdate(selectedBlock.id, {
+                            handleUpdate(selectedBlock.id, {
                               properties: {
                                 ...selectedBlock.properties,
                                 options: newOptions,
@@ -492,7 +535,7 @@ export const QuizEditor = () => {
                   <select
                     value={selectedBlock.properties.buttonStyle || "primary"}
                     onChange={(e) =>
-                      onUpdate(selectedBlock.id, {
+                      handleUpdate(selectedBlock.id, {
                         properties: {
                           ...selectedBlock.properties,
                           buttonStyle: e.target.value,
