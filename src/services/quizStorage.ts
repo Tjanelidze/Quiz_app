@@ -21,12 +21,115 @@ class QuizStorageService {
     } catch (error) {
       console.error("Error parsing quizzes from localStorage:", error);
       toast.error("Failed to load quizzes from storage");
+
       return [];
+    }
+  }
+
+  private generateId(): string {
+    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    // Fallback for older browsers
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  private saveQuizzesToStorage(
+    quizzes: Quiz[],
+    successMessage: string = "Saved successfully!",
+  ): boolean {
+    try {
+      const jsonString = JSON.stringify(quizzes);
+      localStorage.setItem(STORAGE_KEY, jsonString);
+
+      toast.success(successMessage);
+      return true;
+    } catch (error) {
+      console.error("Error saving quizzes to localStorage: ", error);
+      toast.error("Failed to save quiz to storage");
+
+      // Check if it's a quota exceeded error
+      if (error instanceof Error && error.name === "QuotaExceededError") {
+        toast.error(
+          "Storage quota exceeded. Please delete some quizzes to free up space.",
+        );
+      } else {
+        toast.error("Failed to save quiz to storage, Storage quota exceeded");
+      }
+      return false;
     }
   }
 
   getAllQuizzes(): Quiz[] {
     return this.getQuizzesFromStorage();
+  }
+
+  getQuizById(id: string): Quiz | null {
+    const quizzes = this.getQuizzesFromStorage();
+    return quizzes.find((quiz) => quiz.id === id) || null;
+  }
+
+  saveQuiz(quiz: Quiz): boolean {
+    const quizzes = this.getQuizzesFromStorage();
+    const existingIndex = quizzes.findIndex((q) => q.id === quiz.id);
+
+    if (existingIndex >= 0) {
+      quizzes[existingIndex] = {
+        ...quiz,
+        updatedAt: new Date().toISOString(),
+      };
+    } else {
+      const newQuiz = {
+        ...quiz,
+        id: quiz.id === "new" ? this.generateId() : quiz.id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      quizzes.push(newQuiz);
+    }
+
+    return this.saveQuizzesToStorage(quizzes);
+  }
+
+  deleteQuiz(id: string): boolean {
+    const quizzes = this.getQuizzesFromStorage();
+    const filteredQuizzes = quizzes.filter((quiz) => quiz.id !== id);
+
+    return this.saveQuizzesToStorage(
+      filteredQuizzes,
+      "Quiz deleted successfully!",
+    );
+  }
+
+  deleteBlock({ quizId, blockId }: { quizId: string; blockId: string }) {
+    const quizzes = this.getQuizzesFromStorage();
+    const quizIndex = quizzes.findIndex((quiz) => quiz.id === quizId);
+
+    if (quizIndex === -1) {
+      toast.error("Quiz not found");
+      return false;
+    }
+
+    const quiz = quizzes[quizIndex];
+    const blockIndex = quiz.blocks.findIndex((block) => block.id === blockId);
+
+    if (blockIndex === -1) {
+      toast.error("Block not found");
+      return false;
+    }
+
+    const updatedBlocks = quiz.blocks.filter((block) => block.id !== blockId);
+    const updatedQuiz = {
+      ...quiz,
+      blocks: updatedBlocks,
+      updatedAt: new Date().toISOString(),
+    };
+
+    quizzes[quizIndex] = updatedQuiz;
+
+    return this.saveQuizzesToStorage(quizzes, "Block deleted successfully!");
   }
 }
 

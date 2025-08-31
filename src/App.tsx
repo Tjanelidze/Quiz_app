@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router";
 import { QuizList } from "./components/QuizList";
-import { QuizEditor } from "./components/QuizEditor";
+import { QuizEditor } from "./components/QuizEditor/QuizEditor";
 import { QuizRenderer } from "./components/QuizRenderer";
 import { Toaster } from "react-hot-toast";
 
@@ -15,7 +15,7 @@ function App() {
         </Routes>
 
         <Toaster
-          position="top-right"
+          position="bottom-right"
           toastOptions={{
             duration: 4000,
             style: {

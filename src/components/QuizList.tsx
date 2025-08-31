@@ -27,6 +27,16 @@ export const QuizList = () => {
     navigate("/quiz/edit/new");
   };
 
+  const handleDeleteQuiz = (id: string) => {
+    if (window.confirm("Are you sure you want to delete the quiz?")) {
+      const success = quizStorage.deleteQuiz(id);
+
+      if (success) {
+        setQuizzes((prev) => prev.filter((quiz) => quiz.id !== id));
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -120,7 +130,7 @@ export const QuizList = () => {
 
                     <button
                       onClick={() => {
-                        // TODO: HANDLE DELETE
+                        handleDeleteQuiz(quiz.id);
                       }}
                       className="cursor-pointer rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-700"
                     >
