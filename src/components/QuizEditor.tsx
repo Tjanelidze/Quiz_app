@@ -81,6 +81,29 @@ export const QuizEditor = () => {
               placeholder="Enter quiz title..."
             />
           </div>
+
+          <div className="flex space-x-3">
+            <button
+              onClick={() => {
+                // TODO: SAVE BUTTON
+              }}
+              className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+            >
+              Save
+            </button>
+            <button
+              onClick={() => {
+                // TODO: PUBLISH BUTTON
+              }}
+              className={`cursor-pointer rounded-lg px-4 py-2 font-medium ${
+                quiz.published
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
+            >
+              {quiz.published ? "Unpublish" : "Publish"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
