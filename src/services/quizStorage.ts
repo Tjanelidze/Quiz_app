@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import type { Quiz } from "../types/quizType";
+import type { Quiz, QuizBlock } from "../types/quizType";
 
 const STORAGE_KEY = "quizbuilder.quizzes";
 
@@ -58,6 +58,31 @@ class QuizStorageService {
         toast.error("Failed to save quiz to storage, Storage quota exceeded");
       }
       return false;
+    }
+  }
+
+  private getTemporaryBlocks(): QuizBlock[] {
+    try {
+      const stored = localStorage.getItem("quizbuilder.tempBlocks");
+      if (!stored) return [];
+
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+
+      return parsed;
+    } catch (error) {
+      console.error("Error parsing temporary blocks from localStorage:", error);
+      return [];
+    }
+  }
+
+  saveTemporaryBlocks(blocks: QuizBlock[]): void {
+    try {
+      localStorage.setItem("quizbuilder.tempBlocks", JSON.stringify(blocks));
+    } catch (error) {
+      console.error("Error saving temporary blocks to localStorage:", error);
     }
   }
 
@@ -130,6 +155,49 @@ class QuizStorageService {
     quizzes[quizIndex] = updatedQuiz;
 
     return this.saveQuizzesToStorage(quizzes, "Block deleted successfully!");
+  }
+
+  addBlock({ quizId, newBlock }: { quizId: string; newBlock: QuizBlock }) {
+    // Check if this is a new quiz (quizId === "new")
+    if (quizId === "new") {
+      // Store block temporarily
+      const tempBlocks = this.getTemporaryBlocks();
+      tempBlocks.push(newBlock);
+      this.saveTemporaryBlocks(tempBlocks);
+
+      toast.success("Block saved temporarily!");
+      return true;
+    }
+
+    // Handle existing quiz
+    const quizzes = this.getQuizzesFromStorage();
+    const quizIndex = quizzes.findIndex((quiz) => quiz.id === quizId);
+
+    if (quizIndex === -1) {
+      toast.error("Quiz not found");
+      return false;
+    }
+
+    const quiz = quizzes[quizIndex];
+    const updatedBlocks = [...quiz.blocks, newBlock];
+
+    const updatedQuiz = {
+      ...quiz,
+      blocks: updatedBlocks,
+      updatedAt: new Date().toISOString(),
+    };
+
+    quizzes[quizIndex] = updatedQuiz;
+
+    return this.saveQuizzesToStorage(quizzes, "Block added successfully!");
+  }
+
+  getTemporaryBlocksFromStorage(): QuizBlock[] {
+    return this.getTemporaryBlocks();
+  }
+
+  clearTemporaryBlocks(): void {
+    localStorage.removeItem("quizbuilder.tempBlocks");
   }
 }
 

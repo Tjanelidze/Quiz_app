@@ -29,6 +29,14 @@ export const QuizEditor = () => {
 
   useEffect(() => {
     if (isNewQuiz) {
+      // Load temporary blocks if they exist
+      const tempBlocks = quizStorage.getTemporaryBlocksFromStorage();
+      if (tempBlocks.length > 0) {
+        setQuiz((prev) => ({
+          ...prev,
+          blocks: tempBlocks,
+        }));
+      }
       setIsLoading(false);
     } else {
       const existingQuiz = quizStorage.getQuizById(id!);
@@ -44,6 +52,15 @@ export const QuizEditor = () => {
     setIsLoading(false);
   }, []);
 
+  // Cleanup temporary blocks when leaving creation page
+  useEffect(() => {
+    return () => {
+      if (isNewQuiz) {
+        quizStorage.clearTemporaryBlocks();
+      }
+    };
+  }, [isNewQuiz]);
+
   const handleBack = () => {
     navigate("/");
   };
@@ -56,32 +73,39 @@ export const QuizEditor = () => {
     }));
   };
 
-  const addBlock = useCallback((type: string, insertBeforeId?: string) => {
-    const newBlock: QuizBlock = {
-      id: `block_${Date.now()}`,
-      type: type as QuizBlock["type"],
-      content: `New ${type}`,
-      properties:
-        type === "question"
-          ? { questionType: "single", options: ["Option 1", "Option 2"] }
-          : {},
-    };
-
-    setQuiz((prev) => {
-      const newBlocks = [...prev.blocks];
-      if (insertBeforeId) {
-        const index = newBlocks.findIndex((b) => b.id === insertBeforeId);
-        newBlocks.splice(index, 0, newBlock);
-      } else {
-        newBlocks.push(newBlock);
-      }
-      return {
-        ...prev,
-        blocks: newBlocks,
-        updatedAt: new Date().toISOString(),
+  const addBlock = useCallback(
+    (type: string, insertBeforeId?: string) => {
+      const newBlockId = `block_${Date.now()}`;
+      const newBlock: QuizBlock = {
+        id: newBlockId,
+        type: type as QuizBlock["type"],
+        content: `New ${type}`,
+        properties:
+          type === "question"
+            ? { questionType: "single", options: ["Option 1", "Option 2"] }
+            : {},
       };
-    });
-  }, []);
+
+      setQuiz((prev) => {
+        const newBlocks = [...prev.blocks];
+        if (insertBeforeId) {
+          const index = newBlocks.findIndex((b) => b.id === insertBeforeId);
+          newBlocks.splice(index, 0, newBlock);
+        } else {
+          newBlocks.push(newBlock);
+        }
+        return {
+          ...prev,
+          blocks: newBlocks,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+
+      // Save block to storage (temporary for new quiz, permanent for existing)
+      quizStorage.addBlock({ quizId: id!, newBlock });
+    },
+    [id],
+  );
 
   const handleSave = () => {
     try {
@@ -97,6 +121,11 @@ export const QuizEditor = () => {
             navigate(`/quiz/edit/${savedQuiz.id}`, { replace: true });
           }
         }
+
+        // Clear temporary blocks after successful save
+        if (isNewQuiz) {
+          quizStorage.clearTemporaryBlocks();
+        }
       }
     } catch (error) {
       console.error("Failed to save quiz:", error);
@@ -111,13 +140,21 @@ export const QuizEditor = () => {
         updatedAt: new Date().toISOString(),
       }));
 
-      quizStorage.deleteBlock({ quizId: id!, blockId });
+      if (isNewQuiz) {
+        // For new quiz, update temporary storage
+        const tempBlocks = quizStorage.getTemporaryBlocksFromStorage();
+        const updatedTempBlocks = tempBlocks.filter((b) => b.id !== blockId);
+        quizStorage.saveTemporaryBlocks(updatedTempBlocks);
+      } else {
+        // For existing quiz, delete from permanent storage
+        quizStorage.deleteBlock({ quizId: id!, blockId });
+      }
 
       if (selectedBlockId === blockId) {
         setSelectedBlockId(null);
       }
     },
-    [selectedBlockId],
+    [selectedBlockId, isNewQuiz, id],
   );
 
   const onUpdate = useCallback(
@@ -256,10 +293,8 @@ export const QuizEditor = () => {
                 </p>
                 <div className="mt-4">
                   <button
-                    onClick={() => {
-                      // TODO: ADD NEW BLOCK
-                    }}
-                    className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                    onClick={() => addBlock("heading")}
+                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
                   >
                     + Add First Block
                   </button>
@@ -334,7 +369,7 @@ export const QuizEditor = () => {
                           },
                         })
                       }
-                      className="w-full rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                      className="w-full cursor-pointer rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="single">Single Choice (Radio)</option>
                       <option value="multi">Multiple Choice (Checkbox)</option>
@@ -396,7 +431,7 @@ export const QuizEditor = () => {
                                   },
                                 });
                               }}
-                              className="p-1 text-red-600 hover:text-red-800"
+                              className="cursor-pointer p-1 text-red-600 hover:text-red-800"
                               disabled={
                                 (
                                   selectedBlock.properties.options || [
@@ -406,7 +441,20 @@ export const QuizEditor = () => {
                                 ).length <= 2
                               }
                             >
-                              ×
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-3"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M6 18 18 6M6 6l12 12"
+                                />
+                              </svg>
                             </button>
                           </div>
                         ))}
@@ -426,7 +474,7 @@ export const QuizEditor = () => {
                               },
                             });
                           }}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
                         >
                           + Add Option
                         </button>
@@ -451,7 +499,7 @@ export const QuizEditor = () => {
                         },
                       })
                     }
-                    className="w-full rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    className="w-full cursor-pointer rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="primary">Primary</option>
                     <option value="secondary">Secondary</option>
