@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router";
 import { QuizList } from "./components/QuizList";
 import { QuizEditor } from "./components/QuizEditor/QuizEditor";
-import { QuizRenderer } from "./components/QuizRenderer";
+import QuizView from "./components/QuizView/QuizView";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<QuizList />} />
           <Route path="/quiz/edit/:id" element={<QuizEditor />} />
-          <Route path="/quiz/view/:id" element={<QuizRenderer />} />
+          <Route path="/quiz/view/:id" element={<QuizView />} />
         </Routes>
 
         <Toaster
