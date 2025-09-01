@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { quizStorage } from "../../services/quizStorage";
 import type { Quiz, QuizBlock } from "../../types/quizType";
+import { Header } from "./components/Header/Header";
+import { NotPublished } from "./components/NotPublishedQuiz/NotPublished";
+import { NotFound } from "./components/NotFound/NotFound";
+import { Loading } from "../Loading/Loading";
 
 const QuizView = () => {
   const { id } = useParams();
@@ -213,85 +217,21 @@ const QuizView = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading quiz...</p>
-        </div>
-      </div>
-    );
+    <Loading text={"Loading quiz..."} />;
   }
 
   if (!quiz) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">
-            Quiz Not Found
-          </h1>
-          <p className="mb-6 text-gray-600">
-            The quiz you're looking for doesn't exist.
-          </p>
-          <button
-            onClick={handleBack}
-            className="cursor-pointer rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
-          >
-            Back to Quiz List
-          </button>
-        </div>
-      </div>
-    );
+    return <NotFound onBack={handleBack} />;
   }
 
   if (!quiz.published) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">
-            Quiz Not Published
-          </h1>
-          <p className="mb-6 text-gray-600">This quiz is not published yet.</p>
-          <button
-            onClick={handleBack}
-            className="cursor-pointer rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
-          >
-            Back to Quiz List
-          </button>
-        </div>
-      </div>
-    );
+    return <NotPublished onBack={handleBack} />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="border-b border-gray-200 bg-white px-6 py-4">
-        <div className="flex items-center justify-between">
-          <button
-            onClick={handleBack}
-            className="flex cursor-pointer items-center space-x-2 text-gray-600 hover:text-gray-800"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
-            <span>Back</span>
-          </button>
-          <h1 className="text-xl font-semibold text-gray-900">{quiz.title}</h1>
-          <div className="w-20"></div> {/* Spacer for centering */}
-        </div>
-      </div>
+      <Header onBack={handleBack} quiz={quiz} />
 
       {/* Quiz Content */}
       <div className="container mx-auto max-w-4xl px-4 py-8">

@@ -6,6 +6,7 @@ import { PropertiesPanel } from "./components/PropertiesPanel/PropertiesPanel";
 import { useQuizManager } from "../../hooks/useQuizManager";
 import { useQuizActions } from "../../hooks/useQuizActions";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
+import { Loading } from "../Loading/Loading";
 
 const buildingBlocks = [
   { type: "heading", label: "Heading", icon: "📝" },
@@ -60,14 +61,7 @@ export const QuizEditor = () => {
   const { isDragOver, dragOverBlockId, draggedBlockId } = getDragState();
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <p className="text-gray-600">Loading quiz...</p>
-        </div>
-      </div>
-    );
+    <Loading text={"Loading quiz..."} />;
   }
 
   return (
