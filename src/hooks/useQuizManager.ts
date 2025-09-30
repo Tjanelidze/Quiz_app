@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
 import type { Quiz, QuizBlock } from "../types/quizType";
 import { quizStorage } from "../services/quizStorage";
+import { nowIso } from "../utils/datetime";
 
 export const useQuizManager = () => {
   const { id } = useParams();
@@ -16,8 +17,8 @@ export const useQuizManager = () => {
     title: "Untitled Quiz",
     blocks: [],
     published: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: nowIso(),
+    updatedAt: nowIso(),
   });
 
   useEffect(() => {
@@ -78,7 +79,7 @@ export const useQuizManager = () => {
         return {
           ...prev,
           blocks: newBlocks,
-          updatedAt: new Date().toISOString(),
+          updatedAt: nowIso(),
         };
       });
 
@@ -96,7 +97,7 @@ export const useQuizManager = () => {
       setQuiz((prev) => ({
         ...prev,
         blocks: prev.blocks.filter((b) => b.id !== blockId),
-        updatedAt: new Date().toISOString(),
+        updatedAt: nowIso(),
       }));
 
       if (isNewQuiz) {
@@ -119,7 +120,7 @@ export const useQuizManager = () => {
         blocks: prev.blocks.map((b) =>
           b.id === blockId ? { ...b, ...updates } : b,
         ),
-        updatedAt: new Date().toISOString(),
+        updatedAt: nowIso(),
       }));
 
       if (isNewQuiz) {
@@ -155,7 +156,7 @@ export const useQuizManager = () => {
         return {
           ...prev,
           blocks: newBlocks,
-          updatedAt: new Date().toISOString(),
+          updatedAt: nowIso(),
         };
       });
 
@@ -174,7 +175,7 @@ export const useQuizManager = () => {
       setQuiz((prev) => ({
         ...prev,
         title,
-        updatedAt: new Date().toISOString(),
+        updatedAt: nowIso(),
       }));
 
       if (isNewQuiz) {

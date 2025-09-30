@@ -19,18 +19,14 @@ const QuizView = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
-    const fetchQuiz = async () => {
-      try {
-        const foundQuiz = quizStorage.getQuizById(id!);
-        setQuiz(foundQuiz);
-      } catch (error) {
-        console.error("Failed to fetch quiz:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuiz();
+    try {
+      const foundQuiz = quizStorage.getQuizById(id!);
+      setQuiz(foundQuiz);
+    } catch (error) {
+      console.error("Failed to fetch quiz:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
   const handleBack = () => {

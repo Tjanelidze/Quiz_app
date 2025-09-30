@@ -2,6 +2,10 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import { quizStorage } from "../services/quizStorage";
 import type { Quiz } from "../types/quizType";
+import {
+  publishQuiz as publishQuizUtil,
+  unpublishQuiz as unpublishQuizUtil,
+} from "../utils/quiz";
 
 export const useQuizActions = (
   quiz: Quiz,
@@ -14,10 +18,8 @@ export const useQuizActions = (
       const success = quizStorage.saveQuiz(quiz);
 
       if (success) {
-        // Clear temporary blocks after successful save
         if (isNewQuiz) {
           quizStorage.clearTemporaryBlocks();
-          // Navigate back to main page after saving new quiz
           navigate("/");
         }
       }
@@ -26,11 +28,10 @@ export const useQuizActions = (
     }
   }, [quiz, isNewQuiz, navigate]);
 
-  const handlePublish = useCallback(async () => {
+  const handlePublish = useCallback(() => {
     try {
       let quizId = quiz.id;
 
-      // First save the quiz if it hasn't been saved yet
       if (quiz.id === "new") {
         const saveSuccess = quizStorage.saveQuiz(quiz);
         if (!saveSuccess) {
@@ -41,35 +42,24 @@ export const useQuizActions = (
         const savedQuiz = savedQuizzes[savedQuizzes.length - 1];
         quizId = savedQuiz.id;
         setQuiz(savedQuiz);
-        // Navigate back to main page after saving and publishing new quiz
         navigate("/");
         return;
       }
 
       const success = quizStorage.publishQuiz(quizId);
       if (success) {
-        setQuiz((prev) => ({
-          ...prev,
-          published: true,
-          updatedAt: new Date().toISOString(),
-          publishedAt: new Date().toISOString(),
-        }));
+        setQuiz((prev) => publishQuizUtil(prev));
       }
     } catch (error) {
       console.error("Failed to publish quiz:", error);
     }
   }, [quiz, setQuiz, navigate]);
 
-  const handleUnpublish = useCallback(async () => {
+  const handleUnpublish = useCallback(() => {
     try {
       const success = quizStorage.unpublishQuiz(quiz.id);
       if (success) {
-        setQuiz((prev) => ({
-          ...prev,
-          published: false,
-          updatedAt: new Date().toISOString(),
-          publishedAt: undefined,
-        }));
+        setQuiz((prev) => unpublishQuizUtil(prev));
       }
     } catch (error) {
       console.error("Failed to unpublish quiz:", error);
