@@ -7,12 +7,13 @@ import { useQuizManager } from "../../hooks/useQuizManager";
 import { useQuizActions } from "../../hooks/useQuizActions";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
 import { Loading } from "../Loading/Loading";
+import { QuizBlockType } from "../../types/quizType";
 
 const buildingBlocks = [
-  { type: "heading", label: "Heading", icon: "📝" },
-  { type: "question", label: "Question", icon: "❓" },
-  { type: "button", label: "Button", icon: "🔘" },
-  { type: "footer", label: "Footer", icon: "📄" },
+  { type: QuizBlockType.HEADING, label: "Heading", icon: "📝" },
+  { type: QuizBlockType.QUESTION, label: "Question", icon: "❓" },
+  { type: QuizBlockType.BUTTON, label: "Button", icon: "🔘" },
+  { type: QuizBlockType.FOOTER, label: "Footer", icon: "📄" },
 ];
 
 export const QuizEditor = () => {
