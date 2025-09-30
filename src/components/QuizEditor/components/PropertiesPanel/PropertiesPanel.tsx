@@ -28,9 +28,9 @@ export const PropertiesPanel = ({
 
   if (!selectedBlock) {
     return (
-      <div className="w-80 border-l border-gray-200 bg-white p-4">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900">Properties</h3>
-        <div className="py-8 text-center text-gray-500">
+      <div className="border-default bg-surface text-primary w-80 border-l p-4">
+        <h3 className="text-primary mb-4 text-lg font-semibold">Properties</h3>
+        <div className="text-secondary py-8 text-center">
           <p>Select a block to edit its properties</p>
         </div>
       </div>
@@ -38,14 +38,14 @@ export const PropertiesPanel = ({
   }
 
   return (
-    <div className="w-80 border-l border-gray-200 bg-white p-4">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Properties</h3>
+    <div className="border-default bg-surface text-primary w-80 border-l p-4">
+      <h3 className="text-primary mb-4 text-lg font-semibold">Properties</h3>
 
       <div className="space-y-4">
         <div>
           <label
             htmlFor=""
-            className="mb-2 block text-sm font-medium text-gray-700"
+            className="text-secondary mb-2 block text-sm font-medium"
           >
             Content
           </label>
@@ -55,16 +55,16 @@ export const PropertiesPanel = ({
               setLocalContent(e.target.value);
               debouncedUpdate(selectedBlock.id, { content: e.target.value });
             }}
-            className="w-full rounded-md border border-gray-300 p-2 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
+            className="border-default w-full rounded-md border p-2 outline-none focus:border-transparent focus:ring-2 focus:ring-[var(--color-primary-500)]"
             rows={3}
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
+          <label className="text-secondary mb-2 block text-sm font-medium">
             Block Type
           </label>
-          <div className="rounded bg-gray-50 p-2 text-sm text-gray-600">
+          <div className="bg-background text-secondary rounded p-2 text-sm">
             {selectedBlock.type.charAt(0).toUpperCase() +
               selectedBlock.type.slice(1)}
           </div>
@@ -75,7 +75,7 @@ export const PropertiesPanel = ({
         {selectedBlock.type === "question" && (
           <>
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="text-secondary mb-2 block text-sm font-medium">
                 Question Type
               </label>
               <select
@@ -88,7 +88,7 @@ export const PropertiesPanel = ({
                     },
                   })
                 }
-                className="w-full cursor-pointer rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                className="border-default w-full cursor-pointer rounded-md border p-2 focus:border-transparent focus:ring-2 focus:ring-[var(--color-primary-500)]"
               >
                 <option value="single">Single Choice (Radio)</option>
                 <option value="multi">Multiple Choice (Checkbox)</option>
@@ -99,7 +99,7 @@ export const PropertiesPanel = ({
             {(selectedBlock.properties.questionType === "single" ||
               selectedBlock.properties.questionType === "multi") && (
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="text-secondary mb-2 block text-sm font-medium">
                   Options
                 </label>
                 <div className="space-y-2">
@@ -124,7 +124,7 @@ export const PropertiesPanel = ({
                             },
                           });
                         }}
-                        className="flex-1 rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                        className="border-default flex-1 rounded-md border p-2 focus:border-transparent focus:ring-2 focus:ring-[var(--color-primary-500)]"
                         placeholder={`Option ${index + 1}`}
                       />
                       <button
@@ -140,7 +140,7 @@ export const PropertiesPanel = ({
                             },
                           });
                         }}
-                        className="cursor-pointer p-1 text-red-600 hover:text-red-800"
+                        className="text-danger hover:text-danger-strong cursor-pointer p-1"
                         disabled={
                           (selectedBlock.properties.options || DEFAULT_OPTIONS)
                             .length <= 2
@@ -168,7 +168,7 @@ export const PropertiesPanel = ({
                         },
                       });
                     }}
-                    className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
+                    className="text-accent hover:text-accent-strong cursor-pointer text-sm"
                   >
                     + Add Option
                   </button>
@@ -180,7 +180,7 @@ export const PropertiesPanel = ({
 
         {selectedBlock.type === "button" && (
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="text-secondary mb-2 block text-sm font-medium">
               Button Style
             </label>
             <select
@@ -193,7 +193,7 @@ export const PropertiesPanel = ({
                   },
                 })
               }
-              className="w-full cursor-pointer rounded-md border border-gray-300 p-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              className="border-default w-full cursor-pointer rounded-md border p-2 focus:border-transparent focus:ring-2 focus:ring-[var(--color-primary-500)]"
             >
               <option value="primary">Next</option>
               <option value="primary">Submit</option>

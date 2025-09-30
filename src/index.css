@@ -1,28 +1,187 @@
 @import "tailwindcss";
 
 :root {
-  /* base surfaces & text (RGB so we can use / <alpha-value>) */
-  --bg: 255 255 255;
-  --card: 255 255 255;
-  --fg: 17 24 39; /* ~gray-900 */
-  --muted: 107 114 128; /* ~gray-500 */
-  --border: 229 231 235; /* ~gray-200 */
-  --hover: 249 250 251; /* ~gray-50 */
+  /* Gray Scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 
-  /* brand & actions */
-  --primary: 37 99 235; /* blue-600 */
-  --primary-foreground: 255 255 255;
-  --primary-hover: 29 78 216; /* blue-700 */
+  /* Primary (Blue-ish) */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
 
-  --success: 22 163 74; /* green-600 */
-  --success-hover: 21 128 61; /* green-700 */
-  --success-bg: 220 252 231; /* green-100 */
-  --success-fg: 22 101 52; /* green-800 */
+  /* Success Colors */
+  --color-success-100: #dcfce7;
+  --color-success-300: #86efac;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
 
-  --warning: 202 138 4; /* yellow-600 */
-  --warning-bg: 254 249 195; /* yellow-100-ish */
-  --warning-fg: 133 77 14; /* yellow-800 */
+  /* Danger Colors */
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
 
-  --danger: 220 38 38; /* red-600 */
-  --danger-hover: 185 28 28; /* red-700 */
+  /* Warning Colors */
+  --color-warning-100: #fef3c7;
+  --color-warning-800: #92400e;
+
+  /* Background Colors */
+  --color-background: var(--color-gray-50);
+  --color-surface: #ffffff;
+  --color-overlay: rgba(17, 24, 39, 0.5);
+
+  /* Text Colors */
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+
+  /* Border Colors */
+  --color-border: var(--color-gray-200);
+  --color-border-strong: var(--color-gray-300);
+}
+
+.bg-background {
+  background: var(--color-background);
+}
+.bg-surface {
+  background: var(--color-surface);
+}
+.bg-accent {
+  background: var(--color-primary-600);
+}
+.bg-accent-hover:hover {
+  background: var(--color-primary-700);
+}
+.bg-accent-subtle {
+  background: var(--color-primary-50);
+}
+.bg-accent-soft {
+  background: var(--color-primary-200);
+}
+.bg-success {
+  background: var(--color-success-600);
+}
+.bg-success-hover:hover {
+  background: var(--color-success-700);
+}
+.bg-success-subtle {
+  background: var(--color-success-100);
+}
+.bg-success-soft {
+  background: var(--color-success-300);
+}
+.bg-danger {
+  background: var(--color-danger-600);
+}
+.bg-danger-hover:hover {
+  background: var(--color-danger-700);
+}
+.bg-danger-subtle {
+  background: var(--color-danger-100);
+}
+.bg-warning-subtle {
+  background: var(--color-warning-100);
+}
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-inverse {
+  color: #ffffff;
+}
+.text-accent {
+  color: var(--color-primary-600);
+}
+.text-accent-strong {
+  color: var(--color-primary-700);
+}
+.text-success-strong {
+  color: var(--color-success-700);
+}
+.text-warning-strong {
+  color: var(--color-warning-800);
+}
+.text-danger {
+  color: var(--color-danger-600);
+}
+.text-danger-strong {
+  color: var(--color-danger-700);
+}
+.border-default {
+  border-color: var(--color-border);
+}
+.border-strong {
+  border-color: var(--color-border-strong);
+}
+.border-accent {
+  border-color: var(--color-primary-400);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.badge-success {
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+}
+.badge-warning {
+  background: var(--color-warning-100);
+  color: var(--color-warning-800);
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: 200ms;
+}
+.btn-primary {
+  background: var(--color-primary-600);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: var(--color-primary-700);
+}
+.btn-success {
+  background: var(--color-success-600);
+  color: #ffffff;
+}
+.btn-success:hover {
+  background: var(--color-success-700);
+}
+.btn-danger {
+  background: var(--color-danger-600);
+  color: #ffffff;
+}
+.btn-danger:hover {
+  background: var(--color-danger-700);
+}
+
+.focus-ring-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-500);
 }

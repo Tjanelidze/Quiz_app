@@ -46,8 +46,8 @@ export const QuizCanvas = ({
         className={clsx(
           `min-h-full rounded-lg border-2 border-dashed transition-colors ${
             isDragOver
-              ? "border-blue-400 bg-blue-50"
-              : "border-gray-300 bg-white"
+              ? "border-accent bg-accent-subtle"
+              : "border-default bg-surface"
           } p-6`,
         )}
         onDragOver={onDragOver}
@@ -55,7 +55,7 @@ export const QuizCanvas = ({
         onDrop={onDrop}
       >
         {blocks.length === 0 ? (
-          <div className="py-12 text-center text-gray-500">
+          <div className="text-secondary py-12 text-center">
             <p className="text-lg">
               Drag building blocks here to start building your quiz
             </p>
@@ -65,7 +65,7 @@ export const QuizCanvas = ({
             <div className="mt-4">
               <button
                 onClick={() => onAddBlock("heading")}
-                className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                className="btn btn-primary cursor-pointer rounded-lg"
               >
                 + Add First Block
               </button>
@@ -80,9 +80,9 @@ export const QuizCanvas = ({
                   className={clsx(
                     `h-3 transition-all duration-200 ease-in-out ${
                       dragOverBlockId === block.id && draggedBlockId
-                        ? "scale-y-110 bg-green-300"
+                        ? "bg-success-soft scale-y-110"
                         : dragOverBlockId === block.id && !draggedBlockId
-                          ? "scale-y-110 bg-blue-200"
+                          ? "bg-accent-soft scale-y-110"
                           : "bg-transparent"
                     }`,
                   )}

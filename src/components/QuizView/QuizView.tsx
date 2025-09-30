@@ -59,7 +59,7 @@ const QuizView = () => {
       case "heading": {
         return (
           <div key={block.id} className="mb-6">
-            <h2 className="text-center text-2xl font-bold text-gray-900">
+            <h2 className="text-primary text-center text-2xl font-bold">
               {block.content}
             </h2>
           </div>
@@ -76,9 +76,9 @@ const QuizView = () => {
           return (
             <div
               key={block.id}
-              className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+              className="border-default bg-surface text-primary mb-6 rounded-lg border p-6 shadow-sm"
             >
-              <h3 className="mb-4 text-lg font-medium text-gray-900">
+              <h3 className="text-primary mb-4 text-lg font-medium">
                 {block.content}
               </h3>
               <div className="space-y-3">
@@ -95,9 +95,9 @@ const QuizView = () => {
                       onChange={(e) =>
                         handleAnswerChange(block.id, e.target.value)
                       }
-                      className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="border-default h-4 w-4 text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="text-gray-700">{option}</span>
+                    <span className="text-secondary">{option}</span>
                   </label>
                 ))}
               </div>
@@ -109,9 +109,9 @@ const QuizView = () => {
           return (
             <div
               key={block.id}
-              className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+              className="border-default bg-surface text-primary mb-6 rounded-lg border p-6 shadow-sm"
             >
-              <h3 className="mb-4 text-lg font-medium text-gray-900">
+              <h3 className="text-primary mb-4 text-lg font-medium">
                 {block.content}
               </h3>
               <div className="space-y-3">
@@ -139,9 +139,9 @@ const QuizView = () => {
                             );
                           }
                         }}
-                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="border-default h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">{option}</span>
+                      <span className="text-secondary">{option}</span>
                     </label>
                   );
                 })}
@@ -154,16 +154,16 @@ const QuizView = () => {
         return (
           <div
             key={block.id}
-            className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+            className="border-default bg-surface text-primary mb-6 rounded-lg border p-6 shadow-sm"
           >
-            <h3 className="mb-4 text-lg font-medium text-gray-900">
+            <h3 className="text-primary mb-4 text-lg font-medium">
               {block.content}
             </h3>
             <textarea
               value={(answers[block.id] as string) || ""}
               onChange={(e) => handleAnswerChange(block.id, e.target.value)}
               placeholder="Type your answer here..."
-              className="w-full resize-none rounded-md border border-gray-300 p-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              className="border-default w-full resize-none rounded-md border p-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               rows={4}
             />
           </div>
@@ -207,7 +207,7 @@ const QuizView = () => {
         return (
           <div
             key={block.id}
-            className="mt-8 border-t border-gray-200 p-4 text-center text-gray-600"
+            className="border-default text-secondary mt-8 border-t p-4 text-center"
           >
             {block.content}
           </div>
@@ -228,7 +228,7 @@ const QuizView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-background text-primary min-h-screen">
       {/* Header */}
       <Header onBack={handleBack} quiz={quiz} />
 

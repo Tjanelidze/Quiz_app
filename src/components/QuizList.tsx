@@ -46,25 +46,25 @@ export const QuizList = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Quiz List</h1>
+        <h1 className="text-primary text-3xl font-bold">Quiz List</h1>
 
         <button
           onClick={handleCreateQuiz}
-          className="p cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
+          className="p btn btn-primary cursor-pointer rounded-lg"
         >
           Create Quiz
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg bg-white shadow-md">
-        <div className="border-b border-gray-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+      <div className="bg-surface text-primary overflow-hidden rounded-lg shadow-md">
+        <div className="border-default border-b px-6 py-4">
+          <h2 className="text-primary text-lg font-semibold">
             Available Quizzes
           </h2>
         </div>
 
         {quizzes.length === 0 ? (
-          <div className="px-6 py-8 text-center text-gray-500">
+          <div className="text-secondary px-6 py-8 text-center">
             <p>No quizzes available. Create your first quiz!</p>
           </div>
         ) : (
@@ -72,30 +72,28 @@ export const QuizList = () => {
             {quizzes.map((quiz) => (
               <div
                 key={quiz.id}
-                className="px-6 py-4 transition-colors duration-150 hover:bg-gray-50"
+                className="hover:bg-background px-6 py-4 transition-colors duration-150"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex items-center space-x-3">
-                      <h3 className="text-lg font-medium text-gray-900">
+                      <h3 className="text-primary text-lg font-medium">
                         {quiz.title}
                       </h3>
                       <span
                         className={clsx(
-                          "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                          quiz.published
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800",
+                          "badge",
+                          quiz.published ? "badge-success" : "badge-warning",
                         )}
                       >
                         {quiz.published ? "Published" : "Draft"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-secondary text-sm">
                       Last updated: {formatDate(quiz.updatedAt)}
                     </p>
                     {quiz.published && quiz.publishedAt && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-secondary text-sm">
                         Published: {formatDate(quiz.publishedAt)}
                       </p>
                     )}
@@ -103,13 +101,13 @@ export const QuizList = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => handleView(quiz.id)}
-                      className="cursor-pointer rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-green-700"
+                      className="btn btn-success cursor-pointer rounded-md text-sm"
                     >
                       View
                     </button>
                     <button
                       onClick={() => handleEdit(quiz.id)}
-                      className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-blue-700"
+                      className="btn btn-primary cursor-pointer rounded-md text-sm"
                     >
                       Edit
                     </button>
@@ -118,7 +116,7 @@ export const QuizList = () => {
                       onClick={() => {
                         handleDeleteQuiz(quiz.id);
                       }}
-                      className="cursor-pointer rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-700"
+                      className="btn btn-danger cursor-pointer rounded-md text-sm"
                     >
                       Delete
                     </button>

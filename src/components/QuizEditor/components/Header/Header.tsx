@@ -21,12 +21,12 @@ export const Header = ({
   onUnpublish,
 }: HeaderProps) => {
   return (
-    <div className="border-b border-gray-200 bg-white px-6 py-4">
+    <div className="border-default bg-surface text-primary border-b px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
             onClick={onBack}
-            className="flex cursor-pointer items-center space-x-1 text-gray-600 hover:text-gray-800"
+            className="text-secondary hover:text-primary flex cursor-pointer items-center space-x-1"
           >
             <ChevronLeftIcon
               className="size-5"
@@ -40,7 +40,7 @@ export const Header = ({
             name="title"
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
-            className="rounded border-none bg-transparent px-2 py-1 text-2xl font-bold outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded border-none bg-transparent px-2 py-1 text-2xl font-bold outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
             placeholder="Enter quiz title..."
           />
         </div>
@@ -48,7 +48,7 @@ export const Header = ({
         <div className="flex space-x-3">
           <button
             onClick={onSave}
-            className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+            className="btn btn-primary cursor-pointer rounded-lg"
           >
             Save
           </button>
@@ -56,9 +56,7 @@ export const Header = ({
             onClick={isPublished ? onUnpublish : onPublish}
             className={clsx(
               `cursor-pointer rounded-lg px-4 py-2 font-medium ${
-                isPublished
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "bg-green-600 text-white hover:bg-green-700"
+                isPublished ? "btn btn-danger" : "btn btn-success"
               }`,
             )}
           >
