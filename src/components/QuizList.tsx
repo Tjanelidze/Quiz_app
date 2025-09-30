@@ -22,7 +22,7 @@ export const QuizList = () => {
   };
 
   const handleView = (id: string) => {
-    navigate(`/quiz/view/${id}`);
+    navigate(`/quiz/${id}`);
   };
 
   const handleCreateQuiz = () => {
