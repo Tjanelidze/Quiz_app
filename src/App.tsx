@@ -3,15 +3,16 @@ import { QuizList } from "./components/QuizList";
 import { QuizEditor } from "./components/QuizEditor/QuizEditor";
 import QuizView from "./components/QuizView/QuizView";
 import { Toaster } from "react-hot-toast";
+import { ROUTES } from "./constants/routes";
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path="/" element={<QuizList />} />
-          <Route path="/quiz/edit/:id" element={<QuizEditor />} />
-          <Route path="/quiz/view/:id" element={<QuizView />} />
+          <Route path={ROUTES.HOME} element={<QuizList />} />
+          <Route path={ROUTES.QUIZ_EDIT} element={<QuizEditor />} />
+          <Route path={ROUTES.QUIZ_VIEW} element={<QuizView />} />
         </Routes>
 
         <Toaster

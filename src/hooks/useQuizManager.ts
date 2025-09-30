@@ -21,11 +21,9 @@ export const useQuizManager = () => {
   });
 
   useEffect(() => {
-    // Reset selected block when quiz ID changes
     setSelectedBlockId(null);
 
     if (isNewQuiz) {
-      // Load temporary blocks if they exist
       const tempBlocks = quizStorage.getTemporaryBlocksFromStorage();
       if (tempBlocks.length > 0) {
         setQuiz((prev) => ({
@@ -40,7 +38,6 @@ export const useQuizManager = () => {
       if (existingQuiz) {
         setQuiz(existingQuiz);
       } else {
-        // Quiz not found, redirect to list
         navigate("/");
         return;
       }
@@ -48,13 +45,11 @@ export const useQuizManager = () => {
     setIsLoading(false);
   }, [id, isNewQuiz, navigate]);
 
-  // Cleanup temporary blocks when leaving creation page
   useEffect(() => {
     return () => {
       if (isNewQuiz) {
         quizStorage.clearTemporaryBlocks();
       }
-      // Reset selected block when component unmounts
       setSelectedBlockId(null);
     };
   }, [isNewQuiz]);
@@ -87,12 +82,9 @@ export const useQuizManager = () => {
         };
       });
 
-      // Only save to storage for new quizzes (temporary storage)
-      // For existing quizzes, blocks will be saved when user clicks save button
       if (isNewQuiz) {
         quizStorage.addBlock({ quizId: id!, newBlock });
       } else {
-        // Show feedback for existing quizzes
         toast.success("Block added! Click save to persist changes.");
       }
     },
@@ -108,10 +100,8 @@ export const useQuizManager = () => {
       }));
 
       if (isNewQuiz) {
-        // For new quiz, delete from temporary storage
         quizStorage.deleteTemporaryBlock(blockId);
       } else {
-        // Show feedback for existing quizzes
         toast.success("Block deleted! Click save to persist changes.");
       }
 
@@ -132,13 +122,10 @@ export const useQuizManager = () => {
         updatedAt: new Date().toISOString(),
       }));
 
-      // Show feedback for block updates
       if (isNewQuiz) {
-        // For new quiz, save to temporary storage and show toast
         quizStorage.saveTemporaryBlocks(quiz.blocks);
         toast.success("Block updated temporarily!");
       } else {
-        // For existing quiz, show toast that changes will be saved when clicking save
         toast.success("Block updated! Click save to persist changes.");
       }
     },
@@ -155,14 +142,11 @@ export const useQuizManager = () => {
 
         if (draggedIndex === -1) return prev;
 
-        // Remove the dragged block
         const [draggedBlock] = newBlocks.splice(draggedIndex, 1);
 
         if (targetId === "end") {
-          // Move to the end
           newBlocks.push(draggedBlock);
         } else {
-          // Insert at specific position
           const targetIndex = newBlocks.findIndex((b) => b.id === targetId);
           if (targetIndex === -1) return prev;
           newBlocks.splice(targetIndex, 0, draggedBlock);
@@ -175,7 +159,6 @@ export const useQuizManager = () => {
         };
       });
 
-      // Update storage and show feedback
       if (isNewQuiz) {
         quizStorage.saveTemporaryBlocks(quiz.blocks);
         toast.success("Block reordered temporarily!");
@@ -194,7 +177,6 @@ export const useQuizManager = () => {
         updatedAt: new Date().toISOString(),
       }));
 
-      // Show feedback for title updates
       if (isNewQuiz) {
         toast.success("Title updated temporarily!");
       } else {

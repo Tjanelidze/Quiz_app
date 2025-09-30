@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { QuizBlock } from "../../../../types/quizType";
 import { BlockCard } from "../BlockCard/BlockCard";
 
@@ -8,7 +9,6 @@ interface QuizCanvasProps {
   onDelete: (id: string) => void;
   onAddBlock: (type: string, insertBeforeId?: string) => void;
   onReorderBlock: (draggedId: string, targetId: string) => void;
-  // Drag and drop handlers from parent
   onDragOver: (e: React.DragEvent) => void;
   onDragLeave: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
@@ -17,7 +17,6 @@ interface QuizCanvasProps {
   onBlockDragOver: (e: React.DragEvent, blockId: string) => void;
   onBlockDragLeave: (e: React.DragEvent) => void;
   onBlockDrop: (e: React.DragEvent, targetId: string) => void;
-  // Drag state from parent
   isDragOver: boolean;
   dragOverBlockId: string | null;
   draggedBlockId: string | null;
@@ -44,9 +43,13 @@ export const QuizCanvas = ({
   return (
     <div className="flex-1 p-6">
       <div
-        className={`min-h-full rounded-lg border-2 border-dashed transition-colors ${
-          isDragOver ? "border-blue-400 bg-blue-50" : "border-gray-300 bg-white"
-        } p-6`}
+        className={clsx(
+          `min-h-full rounded-lg border-2 border-dashed transition-colors ${
+            isDragOver
+              ? "border-blue-400 bg-blue-50"
+              : "border-gray-300 bg-white"
+          } p-6`,
+        )}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
@@ -74,13 +77,15 @@ export const QuizCanvas = ({
               <div key={block.id}>
                 {/* Drop zone above block for reordering */}
                 <div
-                  className={`h-3 transition-all duration-200 ease-in-out ${
-                    dragOverBlockId === block.id && draggedBlockId
-                      ? "scale-y-110 bg-green-300"
-                      : dragOverBlockId === block.id && !draggedBlockId
-                        ? "scale-y-110 bg-blue-200"
-                        : "bg-transparent"
-                  }`}
+                  className={clsx(
+                    `h-3 transition-all duration-200 ease-in-out ${
+                      dragOverBlockId === block.id && draggedBlockId
+                        ? "scale-y-110 bg-green-300"
+                        : dragOverBlockId === block.id && !draggedBlockId
+                          ? "scale-y-110 bg-blue-200"
+                          : "bg-transparent"
+                    }`,
+                  )}
                   onDragOver={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -93,7 +98,6 @@ export const QuizCanvas = ({
                   onDrop={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    // Always use onBlockDrop for block-specific drop zones
                     onBlockDrop(e, block.id);
                   }}
                 />
@@ -114,11 +118,13 @@ export const QuizCanvas = ({
                 {/* Drop zone below last block */}
                 {index === blocks.length - 1 && (
                   <div
-                    className={`h-3 transition-all duration-200 ease-in-out ${
-                      dragOverBlockId === "end"
-                        ? "scale-y-110 bg-blue-200"
-                        : "bg-transparent"
-                    }`}
+                    className={clsx(
+                      `h-3 transition-all duration-200 ease-in-out ${
+                        dragOverBlockId === "end"
+                          ? "scale-y-110 bg-blue-200"
+                          : "bg-transparent"
+                      }`,
+                    )}
                     onDragOver={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -137,7 +143,6 @@ export const QuizCanvas = ({
                     onDrop={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      // Always use onBlockDrop for the end drop zone
                       onBlockDrop(e, "end");
                     }}
                   />

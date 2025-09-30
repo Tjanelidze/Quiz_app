@@ -18,7 +18,6 @@ const buildingBlocks = [
 export const QuizEditor = () => {
   const navigate = useNavigate();
 
-  // Use custom hooks for different concerns
   const {
     quiz,
     isLoading,
@@ -33,7 +32,6 @@ export const QuizEditor = () => {
     setQuiz,
   } = useQuizManager();
 
-  // Get drag and drop handlers and state
   const {
     handleDragStart,
     handleDragOver,

@@ -1,5 +1,6 @@
 import { memo } from "react";
 import type { QuizBlock } from "../../../../types/quizType";
+import clsx from "clsx";
 
 interface BlockCardProps {
   block: QuizBlock;
@@ -29,13 +30,15 @@ export const BlockCard = memo(
         draggable={draggable}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
-        className={`cursor-pointer rounded-lg border-2 p-4 transition-all duration-200 ${
-          isSelected
-            ? "border-blue-500 bg-blue-50"
-            : isDragging
-              ? "scale-95 border-gray-400 bg-gray-100 opacity-50"
-              : "border-gray-200 hover:border-gray-300"
-        }`}
+        className={clsx(
+          "cursor-pointer rounded-lg border-2 p-4 transition-all duration-200",
+          {
+            "border-blue-500 bg-blue-50": isSelected,
+            "scale-95 border-gray-400 bg-gray-100 opacity-50":
+              !isSelected && isDragging,
+            "border-gray-200 hover:border-gray-300": !isSelected && !isDragging,
+          },
+        )}
         onClick={() => onSelect(block.id)}
       >
         <div className="mb-2 flex items-center justify-between">

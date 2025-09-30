@@ -1,3 +1,6 @@
+import clsx from "clsx";
+import { ChevronLeftIcon } from "../../../../icons/icons";
+
 interface HeaderProps {
   title: string;
   isPublished: boolean;
@@ -25,20 +28,11 @@ export const Header = ({
             onClick={onBack}
             className="flex cursor-pointer items-center space-x-1 text-gray-600 hover:text-gray-800"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
+            <ChevronLeftIcon
               className="size-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
+              stroke="currentColor"
+              strokeWidth={1.5}
+            />
             <span>Back</span>
           </button>
           <input
@@ -60,11 +54,13 @@ export const Header = ({
           </button>
           <button
             onClick={isPublished ? onUnpublish : onPublish}
-            className={`cursor-pointer rounded-lg px-4 py-2 font-medium ${
-              isPublished
-                ? "bg-red-600 text-white hover:bg-red-700"
-                : "bg-green-600 text-white hover:bg-green-700"
-            }`}
+            className={clsx(
+              `cursor-pointer rounded-lg px-4 py-2 font-medium ${
+                isPublished
+                  ? "bg-red-600 text-white hover:bg-red-700"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`,
+            )}
           >
             {isPublished ? "Unpublish" : "Publish"}
           </button>

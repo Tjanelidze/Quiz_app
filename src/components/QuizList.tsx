@@ -3,6 +3,8 @@ import type { Quiz } from "../types/quizType";
 import { useNavigate } from "react-router";
 import { quizStorage } from "../services/quizStorage";
 import { Loading } from "./Loading/Loading";
+import clsx from "clsx";
+import { formatDate } from "../utils/fromatDate";
 
 export const QuizList = () => {
   const navigate = useNavigate();
@@ -10,7 +12,6 @@ export const QuizList = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    //  load quizzes
     const allQuizzes = quizStorage.getAllQuizzes();
     setQuizzes(allQuizzes);
     setLoading(false);
@@ -36,16 +37,6 @@ export const QuizList = () => {
         setQuizzes((prev) => prev.filter((quiz) => quiz.id !== id));
       }
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   if (isLoading) {
@@ -90,11 +81,12 @@ export const QuizList = () => {
                         {quiz.title}
                       </h3>
                       <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        className={clsx(
+                          "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
                           quiz.published
                             ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+                            : "bg-yellow-100 text-yellow-800",
+                        )}
                       >
                         {quiz.published ? "Published" : "Draft"}
                       </span>
