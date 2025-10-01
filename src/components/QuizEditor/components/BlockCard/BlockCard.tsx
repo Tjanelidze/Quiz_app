@@ -11,6 +11,11 @@ interface BlockCardProps {
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: () => void;
   isDragging?: boolean;
+
+  onDragOver?: (e: React.DragEvent) => void;
+  onDragLeave?: (e: React.DragEvent) => void;
+  onDrop?: (e: React.DragEvent) => void;
+  isDropTarget?: boolean;
 }
 
 export const BlockCard = memo(
@@ -23,6 +28,10 @@ export const BlockCard = memo(
     onDragStart,
     onDragEnd,
     isDragging,
+    onDragOver,
+    onDragLeave,
+    onDrop,
+    isDropTarget,
   }: BlockCardProps) => {
     return (
       <div
@@ -30,13 +39,18 @@ export const BlockCard = memo(
         draggable={draggable}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
         className={clsx(
           "cursor-pointer rounded-lg border-2 p-4 transition-all duration-200",
           {
-            "border-accent bg-accent-subtle": isSelected,
+            "border-accent bg-accent-subtle":
+              isSelected || (isDropTarget && !isDragging),
             "border-default bg-background scale-95 opacity-50":
               !isSelected && isDragging,
-            "border-default hover:border-default": !isSelected && !isDragging,
+            "border-default hover:border-default":
+              !isSelected && !isDragging && !isDropTarget,
           },
         )}
         onClick={() => onSelect(block.id)}

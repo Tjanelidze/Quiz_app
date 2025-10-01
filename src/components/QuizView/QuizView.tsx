@@ -169,8 +169,26 @@ const QuizView = () => {
       case "button": {
         const isLastBlock =
           quiz!.blocks.indexOf(block) === quiz!.blocks.length - 1;
-        const buttonText = isLastBlock ? "Submit Quiz" : "Next";
-        const buttonAction = isLastBlock ? handleSubmit : handleNext;
+        const configuredType = (block.properties as any)?.buttonType as
+          | "next"
+          | "submit"
+          | undefined;
+        const buttonText =
+          configuredType === "submit"
+            ? "Submit Quiz"
+            : configuredType === "next"
+              ? "Next"
+              : isLastBlock
+                ? "Submit Quiz"
+                : "Next";
+        const buttonAction =
+          configuredType === "submit"
+            ? handleSubmit
+            : configuredType === "next"
+              ? handleNext
+              : isLastBlock
+                ? handleSubmit
+                : handleNext;
         const buttonStyle =
           (block.properties?.buttonStyle as
             | "primary"

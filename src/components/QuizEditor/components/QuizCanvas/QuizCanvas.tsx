@@ -113,6 +113,21 @@ export const QuizCanvas = ({
                   }
                   onDragEnd={onBlockDragEnd}
                   isDragging={draggedBlockId === block.id}
+                  onDragOver={(e: React.DragEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = draggedBlockId
+                      ? "move"
+                      : "copy";
+                    onBlockDragOver(e, block.id);
+                  }}
+                  onDragLeave={onBlockDragLeave}
+                  onDrop={(e: React.DragEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onBlockDrop(e, block.id);
+                  }}
+                  isDropTarget={dragOverBlockId === block.id}
                 />
 
                 {/* Drop zone below last block */}
