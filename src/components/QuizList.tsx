@@ -12,6 +12,9 @@ export const QuizList = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    quizStorage.initializeDefaultQuizzes();
+
     const allQuizzes = quizStorage.getAllQuizzes();
     setQuizzes(allQuizzes);
     setLoading(false);

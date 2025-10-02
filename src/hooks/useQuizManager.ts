@@ -73,7 +73,7 @@ export const useQuizManager = () => {
         const newBlocks = [...prev.blocks];
         if (insertBeforeId) {
           const index = newBlocks.findIndex((b) => b.id === insertBeforeId);
-          newBlocks.splice(index, 0, newBlock);
+          newBlocks.splice(index + 1, 0, newBlock);
         } else {
           newBlocks.push(newBlock);
         }
@@ -151,7 +151,7 @@ export const useQuizManager = () => {
         } else {
           const targetIndex = newBlocks.findIndex((b) => b.id === targetId);
           if (targetIndex === -1) return prev;
-          newBlocks.splice(targetIndex, 0, draggedBlock);
+          newBlocks.splice(targetIndex + 1, 0, draggedBlock);
         }
 
         return {
@@ -189,7 +189,6 @@ export const useQuizManager = () => {
 
   const debouncedShowToast = useDebounce(showTitleUpdateToast, 500);
 
-  // Combined function that updates immediately and shows debounced toast
   const updateTitle = useCallback(
     (title: string) => {
       updateTitleImmediate(title);

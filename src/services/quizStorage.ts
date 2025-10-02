@@ -233,6 +233,225 @@ class QuizStorageService {
   clearTemporaryBlocks(): void {
     localStorage.removeItem("quizbuilder.tempBlocks");
   }
+
+  initializeDefaultQuizzes(): void {
+    const quizzes = this.getQuizzesFromStorage();
+
+    if (quizzes.length > 0) return;
+
+    const defaultQuizzes: Quiz[] = [
+      {
+        id: "default-1",
+        title: "JavaScript Fundamentals Quiz",
+        published: true,
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
+        publishedAt: nowIso(),
+        blocks: [
+          {
+            id: "block-1",
+            type: "heading",
+            content: "JavaScript Fundamentals Quiz",
+            properties: {},
+          },
+          {
+            id: "block-2",
+            type: "question",
+            content:
+              "What is the correct way to declare a variable in JavaScript?",
+            properties: {
+              questionType: "single",
+              options: [
+                "var name = 'John'",
+                "variable name = 'John'",
+                "v name = 'John'",
+                "declare name = 'John'",
+              ],
+            },
+          },
+          {
+            id: "block-3",
+            type: "question",
+            content: "Which of the following are JavaScript data types?",
+            properties: {
+              questionType: "multiple",
+              options: [
+                "String",
+                "Number",
+                "Boolean",
+                "Array",
+                "Object",
+                "Function",
+              ],
+            },
+          },
+          {
+            id: "block-4",
+            type: "question",
+            content: "What does 'this' keyword refer to in JavaScript?",
+            properties: {
+              questionType: "single",
+              options: [
+                "The current function",
+                "The current object",
+                "The parent object",
+                "The global object",
+              ],
+            },
+          },
+          {
+            id: "block-5",
+            type: "button",
+            content: "Submit Quiz",
+            properties: {
+              buttonText: "Submit Quiz",
+              buttonType: "submit",
+            },
+          },
+          {
+            id: "block-6",
+            type: "footer",
+            content: "Thank you for taking the JavaScript Fundamentals Quiz!",
+            properties: {},
+          },
+        ],
+      },
+      {
+        id: "default-2",
+        title: "React Knowledge Check",
+        published: true,
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
+        publishedAt: nowIso(),
+        blocks: [
+          {
+            id: "block-7",
+            type: "heading",
+            content: "React Knowledge Check",
+            properties: {},
+          },
+          {
+            id: "block-8",
+            type: "question",
+            content: "What is JSX in React?",
+            properties: {
+              questionType: "single",
+              options: [
+                "A JavaScript library",
+                "A syntax extension for JavaScript",
+                "A CSS framework",
+                "A database query language",
+              ],
+            },
+          },
+          {
+            id: "block-9",
+            type: "question",
+            content: "Which React hooks are used for state management?",
+            properties: {
+              questionType: "multiple",
+              options: [
+                "useState",
+                "useEffect",
+                "useContext",
+                "useReducer",
+                "useMemo",
+                "useCallback",
+              ],
+            },
+          },
+          {
+            id: "block-10",
+            type: "question",
+            content: "What is the purpose of the useEffect hook?",
+            properties: {
+              questionType: "single",
+              options: [
+                "To manage component state",
+                "To perform side effects",
+                "To create custom hooks",
+                "To optimize rendering",
+              ],
+            },
+          },
+          {
+            id: "block-11",
+            type: "button",
+            content: "Check Answers",
+            properties: {
+              buttonText: "Check Answers",
+              buttonType: "submit",
+            },
+          },
+          {
+            id: "block-12",
+            type: "footer",
+            content: "Great job! Keep learning React!",
+            properties: {},
+          },
+        ],
+      },
+      {
+        id: "default-3",
+        title: "General Knowledge Quiz",
+        published: false,
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
+        blocks: [
+          {
+            id: "block-13",
+            type: "heading",
+            content: "General Knowledge Quiz",
+            properties: {},
+          },
+          {
+            id: "block-14",
+            type: "question",
+            content: "What is the capital of France?",
+            properties: {
+              questionType: "single",
+              options: ["London", "Berlin", "Paris", "Madrid"],
+            },
+          },
+          {
+            id: "block-15",
+            type: "question",
+            content: "Which of the following are programming languages?",
+            properties: {
+              questionType: "multiple",
+              options: ["Python", "HTML", "CSS", "JavaScript", "SQL", "JSON"],
+            },
+          },
+          {
+            id: "block-16",
+            type: "question",
+            content: "What year was the first iPhone released?",
+            properties: {
+              questionType: "single",
+              options: ["2005", "2006", "2007", "2008"],
+            },
+          },
+          {
+            id: "block-17",
+            type: "button",
+            content: "Finish Quiz",
+            properties: {
+              buttonText: "Finish Quiz",
+              buttonType: "submit",
+            },
+          },
+          {
+            id: "block-18",
+            type: "footer",
+            content: "Thanks for testing your general knowledge!",
+            properties: {},
+          },
+        ],
+      },
+    ];
+
+    this.saveQuizzesToStorage(defaultQuizzes, "Default quizzes initialized!");
+  }
 }
 
 export const quizStorage = new QuizStorageService();
