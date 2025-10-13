@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import type { Quiz, QuizBlock } from "../types/quizType";
 import { quizStorage } from "../services/quizStorage";
 import { nowIso } from "../utils/datetime";
+import { useDebounce } from "./useDebounce";
 
 export const useQuizManager = () => {
   const { id } = useParams();
@@ -170,21 +171,31 @@ export const useQuizManager = () => {
     [quiz.blocks, isNewQuiz],
   );
 
+  const updateTitleImmediate = useCallback((title: string) => {
+    setQuiz((prev) => ({
+      ...prev,
+      title,
+      updatedAt: nowIso(),
+    }));
+  }, []);
+
+  const showTitleUpdateToast = useCallback(() => {
+    if (isNewQuiz) {
+      toast.success("Title updated temporarily!");
+    } else {
+      toast.success("Title updated! Click save to persist changes.");
+    }
+  }, [isNewQuiz]);
+
+  const debouncedShowToast = useDebounce(showTitleUpdateToast, 500);
+
+  // Combined function that updates immediately and shows debounced toast
   const updateTitle = useCallback(
     (title: string) => {
-      setQuiz((prev) => ({
-        ...prev,
-        title,
-        updatedAt: nowIso(),
-      }));
-
-      if (isNewQuiz) {
-        toast.success("Title updated temporarily!");
-      } else {
-        toast.success("Title updated! Click save to persist changes.");
-      }
+      updateTitleImmediate(title);
+      debouncedShowToast();
     },
-    [isNewQuiz],
+    [updateTitleImmediate, debouncedShowToast],
   );
 
   const selectBlock = useCallback((id: string) => {
