@@ -1,4 +1,8 @@
+import { useEffect, useState } from "react";
 import type { QuizBlock } from "../../../../types/quizType";
+import { useDebounce } from "../../../../hooks/useDebounce";
+import { DEFAULT_OPTIONS } from "./constant/quizConstants";
+import { CloseIcon } from "../../../../icons/icons";
 
 interface PropertiesPanelProps {
   selectedBlock: QuizBlock | null;
@@ -9,6 +13,19 @@ export const PropertiesPanel = ({
   selectedBlock,
   onUpdate,
 }: PropertiesPanelProps) => {
+  const [localContent, setLocalContent] = useState("");
+
+  const debouncedUpdate = useDebounce((...args: unknown[]) => {
+    const [blockId, updates] = args as [string, Partial<QuizBlock>];
+    onUpdate(blockId, updates);
+  }, 500);
+
+  useEffect(() => {
+    if (selectedBlock) {
+      setLocalContent(selectedBlock.content);
+    }
+  }, [selectedBlock]);
+
   if (!selectedBlock) {
     return (
       <div className="w-80 border-l border-gray-200 bg-white p-4">
@@ -33,9 +50,10 @@ export const PropertiesPanel = ({
             Content
           </label>
           <textarea
-            value={selectedBlock.content}
+            value={localContent}
             onChange={(e) => {
-              onUpdate(selectedBlock.id, { content: e.target.value });
+              setLocalContent(e.target.value);
+              debouncedUpdate(selectedBlock.id, { content: e.target.value });
             }}
             className="w-full rounded-md border border-gray-300 p-2 outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500"
             rows={3}
@@ -86,10 +104,8 @@ export const PropertiesPanel = ({
                 </label>
                 <div className="space-y-2">
                   {(
-                    (selectedBlock.properties.options as string[]) || [
-                      "Option 1",
-                      "Option 2",
-                    ]
+                    (selectedBlock.properties.options as string[]) ||
+                    DEFAULT_OPTIONS
                   ).map((option: string, index: number) => (
                     <div key={index} className="flex items-center space-x-2">
                       <input
@@ -97,10 +113,8 @@ export const PropertiesPanel = ({
                         value={option}
                         onChange={(e) => {
                           const newOptions = [
-                            ...(selectedBlock.properties.options || [
-                              "Option 1",
-                              "Option 2",
-                            ]),
+                            ...(selectedBlock.properties.options ||
+                              DEFAULT_OPTIONS),
                           ];
                           newOptions[index] = e.target.value;
                           onUpdate(selectedBlock.id, {
@@ -116,10 +130,8 @@ export const PropertiesPanel = ({
                       <button
                         onClick={() => {
                           const newOptions = (
-                            (selectedBlock.properties.options as string[]) || [
-                              "Option 1",
-                              "Option 2",
-                            ]
+                            (selectedBlock.properties.options as string[]) ||
+                            DEFAULT_OPTIONS
                           ).filter((_: string, i: number) => i !== index);
                           onUpdate(selectedBlock.id, {
                             properties: {
@@ -130,39 +142,24 @@ export const PropertiesPanel = ({
                         }}
                         className="cursor-pointer p-1 text-red-600 hover:text-red-800"
                         disabled={
-                          (
-                            selectedBlock.properties.options || [
-                              "Option 1",
-                              "Option 2",
-                            ]
-                          ).length <= 2
+                          (selectedBlock.properties.options || DEFAULT_OPTIONS)
+                            .length <= 2
                         }
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
+                        <CloseIcon
                           className="size-3"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                          />
-                        </svg>
+                          stroke={"currentColor"}
+                          strokeWidth={1.5}
+                        />
                       </button>
                     </div>
                   ))}
                   <button
                     onClick={() => {
                       const newOptions = [
-                        ...(selectedBlock.properties.options || [
-                          "Option 1",
-                          "Option 2",
-                        ]),
-                        `Option ${(selectedBlock.properties.options || ["Option 1", "Option 2"]).length + 1}`,
+                        ...(selectedBlock.properties.options ||
+                          DEFAULT_OPTIONS),
+                        `Option ${(selectedBlock.properties.options || DEFAULT_OPTIONS).length + 1}`,
                       ];
                       onUpdate(selectedBlock.id, {
                         properties: {

@@ -49,7 +49,6 @@ class QuizStorageService {
       console.error("Error saving quizzes to localStorage: ", error);
       toast.error("Failed to save quiz to storage");
 
-      // Check if it's a quota exceeded error
       if (error instanceof Error && error.name === "QuotaExceededError") {
         toast.error(
           "Storage quota exceeded. Please delete some quizzes to free up space.",
@@ -190,9 +189,7 @@ class QuizStorageService {
   }
 
   addBlock({ quizId, newBlock }: { quizId: string; newBlock: QuizBlock }) {
-    // Check if this is a new quiz (quizId === "new")
     if (quizId === "new") {
-      // Store block temporarily
       const tempBlocks = this.getTemporaryBlocks();
       tempBlocks.push(newBlock);
       this.saveTemporaryBlocks(tempBlocks);
@@ -201,7 +198,6 @@ class QuizStorageService {
       return true;
     }
 
-    // Handle existing quiz
     const quizzes = this.getQuizzesFromStorage();
     const quizIndex = quizzes.findIndex((quiz) => quiz.id === quizId);
 

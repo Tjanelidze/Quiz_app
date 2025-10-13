@@ -8,7 +8,6 @@ interface DragAndDropState {
 }
 
 interface DragAndDropHandlers {
-  // Building block drag handlers
   handleDragStart: (
     e: React.DragEvent,
     block: { type: string; label: string },
@@ -17,7 +16,6 @@ interface DragAndDropHandlers {
   handleDragLeave: (e: React.DragEvent) => void;
   handleDrop: (e: React.DragEvent) => void;
 
-  // Block reordering handlers
   handleBlockDragStart: (e: React.DragEvent, blockId: string) => void;
   handleBlockDragEnd: () => void;
   handleBlockDragOver: (e: React.DragEvent, blockId: string) => void;
