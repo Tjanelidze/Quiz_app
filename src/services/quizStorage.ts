@@ -1,5 +1,10 @@
 import toast from "react-hot-toast";
 import type { Quiz, QuizBlock } from "../types/quizType";
+import { nowIso } from "../utils/datetime";
+import {
+  publishQuiz as publishQuizUtil,
+  unpublishQuiz as unpublishQuizUtil,
+} from "../utils/quiz";
 
 const STORAGE_KEY = "quizbuilder.quizzes";
 
@@ -101,14 +106,14 @@ class QuizStorageService {
     if (existingIndex >= 0) {
       quizzes[existingIndex] = {
         ...quiz,
-        updatedAt: new Date().toISOString(),
+        updatedAt: nowIso(),
       };
     } else {
       const newQuiz = {
         ...quiz,
         id: quiz.id === "new" ? this.generateId() : quiz.id,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
       };
 
       quizzes.push(newQuiz);
@@ -133,12 +138,7 @@ class QuizStorageService {
 
     if (quizIndex === -1) return false;
 
-    quizzes[quizIndex] = {
-      ...quizzes[quizIndex],
-      published: true,
-      updatedAt: new Date().toISOString(),
-      publishedAt: new Date().toISOString(),
-    };
+    quizzes[quizIndex] = publishQuizUtil(quizzes[quizIndex]);
 
     return this.saveQuizzesToStorage(quizzes);
   }
@@ -149,12 +149,7 @@ class QuizStorageService {
 
     if (quizIndex === -1) return false;
 
-    quizzes[quizIndex] = {
-      ...quizzes[quizIndex],
-      published: false,
-      updatedAt: new Date().toISOString(),
-      publishedAt: undefined,
-    };
+    quizzes[quizIndex] = unpublishQuizUtil(quizzes[quizIndex]);
 
     return this.saveQuizzesToStorage(quizzes);
   }
@@ -180,7 +175,7 @@ class QuizStorageService {
     const updatedQuiz = {
       ...quiz,
       blocks: updatedBlocks,
-      updatedAt: new Date().toISOString(),
+      updatedAt: nowIso(),
     };
 
     quizzes[quizIndex] = updatedQuiz;
@@ -212,7 +207,7 @@ class QuizStorageService {
     const updatedQuiz = {
       ...quiz,
       blocks: updatedBlocks,
-      updatedAt: new Date().toISOString(),
+      updatedAt: nowIso(),
     };
 
     quizzes[quizIndex] = updatedQuiz;
