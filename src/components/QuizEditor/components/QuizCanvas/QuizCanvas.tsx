@@ -75,6 +75,32 @@ export const QuizCanvas = ({
           <div className="space-y-4">
             {blocks.map((block, index) => (
               <div key={block.id}>
+                <div
+                  className={clsx(
+                    `h-3 transition-all duration-200 ease-in-out ${
+                      dragOverBlockId === block.id && draggedBlockId
+                        ? "bg-success-soft scale-y-110"
+                        : dragOverBlockId === block.id && !draggedBlockId
+                          ? "bg-accent-soft scale-y-110"
+                          : "bg-transparent"
+                    }`,
+                  )}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = draggedBlockId
+                      ? "move"
+                      : "copy";
+                    onBlockDragOver(e, block.id);
+                  }}
+                  onDragLeave={onBlockDragLeave}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onBlockDrop(e, block.id);
+                  }}
+                />
+
                 <BlockCard
                   block={block}
                   isSelected={selectedBlockId === block.id}
@@ -103,33 +129,6 @@ export const QuizCanvas = ({
                   isDropTarget={dragOverBlockId === block.id}
                 />
 
-                <div
-                  className={clsx(
-                    `h-3 transition-all duration-200 ease-in-out ${
-                      dragOverBlockId === block.id && draggedBlockId
-                        ? "bg-success-soft scale-y-110"
-                        : dragOverBlockId === block.id && !draggedBlockId
-                          ? "bg-accent-soft scale-y-110"
-                          : "bg-transparent"
-                    }`,
-                  )}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.dataTransfer.dropEffect = draggedBlockId
-                      ? "move"
-                      : "copy";
-                    onBlockDragOver(e, block.id);
-                  }}
-                  onDragLeave={onBlockDragLeave}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onBlockDrop(e, block.id);
-                  }}
-                />
-
-                {/* Drop zone below last block */}
                 {index === blocks.length - 1 && (
                   <div
                     className={clsx(
