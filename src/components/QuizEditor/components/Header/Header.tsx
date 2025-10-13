@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ChevronLeftIcon } from "../../../../icons/icons";
+import { CommonHeader } from "../../../../components/common/CommonHeader";
 
 interface HeaderProps {
   title: string;
@@ -21,30 +21,19 @@ export const Header = ({
   onUnpublish,
 }: HeaderProps) => {
   return (
-    <div className="border-default bg-surface text-primary border-b px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={onBack}
-            className="text-secondary hover:text-primary flex cursor-pointer items-center space-x-1"
-          >
-            <ChevronLeftIcon
-              className="size-5"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            />
-            <span>Back</span>
-          </button>
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={(e) => onTitleChange(e.target.value)}
-            className="rounded border-none bg-transparent px-2 py-1 text-2xl font-bold outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
-            placeholder="Enter quiz title..."
-          />
-        </div>
-
+    <CommonHeader
+      onBack={onBack}
+      title={
+        <input
+          type="text"
+          name="title"
+          value={title}
+          onChange={(e) => onTitleChange(e.target.value)}
+          className="rounded border-none bg-transparent px-2 py-1 text-2xl font-bold outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
+          placeholder="Enter quiz title..."
+        />
+      }
+      right={
         <div className="flex space-x-3">
           <button
             onClick={onSave}
@@ -63,7 +52,7 @@ export const Header = ({
             {isPublished ? "Unpublish" : "Publish"}
           </button>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 };
