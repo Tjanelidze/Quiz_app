@@ -14,3 +14,10 @@ export interface Quiz {
   updatedAt: string;
   publishedAt?: string;
 }
+
+export enum QuizBlockType {
+  HEADING = "heading",
+  QUESTION = "question",
+  BUTTON = "button",
+  FOOTER = "footer",
+}
