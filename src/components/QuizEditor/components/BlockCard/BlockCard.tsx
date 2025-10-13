@@ -33,16 +33,16 @@ export const BlockCard = memo(
         className={clsx(
           "cursor-pointer rounded-lg border-2 p-4 transition-all duration-200",
           {
-            "border-blue-500 bg-blue-50": isSelected,
-            "scale-95 border-gray-400 bg-gray-100 opacity-50":
+            "border-accent bg-accent-subtle": isSelected,
+            "border-default bg-background scale-95 opacity-50":
               !isSelected && isDragging,
-            "border-gray-200 hover:border-gray-300": !isSelected && !isDragging,
+            "border-default hover:border-default": !isSelected && !isDragging,
           },
         )}
         onClick={() => onSelect(block.id)}
       >
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-600">
+          <span className="text-secondary text-sm font-medium">
             {block.type.charAt(0).toUpperCase() + block.type.slice(1)}
           </span>
 
@@ -51,12 +51,12 @@ export const BlockCard = memo(
               e.stopPropagation();
               onDelete(block.id);
             }}
-            className="cursor-pointer rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-red-600"
+            className="btn btn-danger cursor-pointer rounded-md text-sm"
           >
             Delete
           </button>
         </div>
-        <div className="text-gray-800">{block.content}</div>
+        <div className="text-primary">{block.content}</div>
       </div>
     );
   },

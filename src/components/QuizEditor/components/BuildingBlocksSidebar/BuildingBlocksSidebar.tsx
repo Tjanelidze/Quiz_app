@@ -16,8 +16,8 @@ export const BuildingBlocksSidebar = ({
   onBlockClick,
 }: BuildingBlocksSidebarProps) => {
   return (
-    <div className="w-64 border-r border-gray-200 bg-white p-4">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">
+    <div className="border-default bg-surface text-primary w-64 border-r p-4">
+      <h3 className="text-primary mb-4 text-lg font-semibold">
         Building Blocks
       </h3>
 
@@ -28,10 +28,10 @@ export const BuildingBlocksSidebar = ({
             draggable
             onDragStart={(e) => onDragStart(e, block)}
             onClick={() => onBlockClick(block.type)}
-            className="flex cursor-pointer items-center space-x-3 rounded-lg border border-gray-200 bg-gray-50 p-3 transition-colors hover:bg-gray-100"
+            className="border-default bg-background hover:bg-background flex cursor-pointer items-center space-x-3 rounded-lg border p-3 transition-colors"
           >
             <span className="text-xl">{block.icon}</span>
-            <span className="font-medium text-gray-700">{block.label}</span>
+            <span className="text-secondary font-medium">{block.label}</span>
           </div>
         ))}
       </div>
