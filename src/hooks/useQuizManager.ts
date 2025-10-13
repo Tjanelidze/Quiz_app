@@ -56,7 +56,7 @@ export const useQuizManager = () => {
 
   const addBlock = useCallback(
     (type: string, insertBeforeId?: string) => {
-      const newBlockId = `block_${Date.now()}`;
+      const newBlockId = `block_${crypto.randomUUID()}`;
       const newBlock: QuizBlock = {
         id: newBlockId,
         type: type as QuizBlock["type"],
