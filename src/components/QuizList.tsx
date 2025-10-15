@@ -12,7 +12,6 @@ export const QuizList = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-
     quizStorage.initializeDefaultQuizzes();
 
     const allQuizzes = quizStorage.getAllQuizzes();
@@ -89,7 +88,7 @@ export const QuizList = () => {
                           quiz.published ? "badge-success" : "badge-warning",
                         )}
                       >
-                        {quiz.published ? "Published" : "Draft"}
+                        {quiz.published ? "Published" : "Not published yet"}
                       </span>
                     </div>
                     <p className="text-secondary text-sm">

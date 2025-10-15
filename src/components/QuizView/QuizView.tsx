@@ -241,6 +241,20 @@ const QuizView = () => {
     return <NotFound onBack={handleBack} />;
   }
 
+  if (!quiz.published) {
+    return (
+      <div className="bg-background text-primary min-h-screen">
+        <Header onBack={handleBack} quiz={quiz} />
+
+        <div className="container mx-auto max-w-4xl px-4 py-8">
+          <div className="text-center">
+            <p className="text-secondary text-lg">Not published yet.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background text-primary min-h-screen">
       {/* Header */}
